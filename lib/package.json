@@ -1,0 +1,36 @@
+{
+  "name": "@plastic-ui/datatable",
+  "description": "A React Data Table",
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "author": "Gonzalo Chumillas",
+  "repository": "github:gchumillas/datatable",
+  "main": "dist/index",
+  "types": "dist/index",
+  "keywords": [
+    "react",
+    "data",
+    "table",
+    "datatable"
+  ],
+  "scripts": {
+    "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}'",
+    "build": "rimraf ./dist && tsc -p tsconfig.build.json",
+    "prepare": "yarn run build"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "~4.11.2",
+    "@material-ui/icons": "~4.11.2",
+    "react": "~17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@types/lodash": "^4.14.168",
+    "@types/react": "~17.0.0",
+    "babel-loader": "^8.2.2"
+  },
+  "dependencies": {
+    "clsx": "^1.1.1",
+    "lodash": "^4.17.21"
+  }
+}
