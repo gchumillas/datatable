@@ -1,5 +1,7 @@
 A Responsive Data Table.
 
+![datatable](https://user-images.githubusercontent.com/5312427/113453175-c07b8580-9405-11eb-8177-4c44600eb075.gif)
+
 ## Install
 
 This library requires [React](https://www.npmjs.com/package/react) and [Material-UI](https://material-ui.com/getting-started/installation/). Make sure they are already installed. Then execute the following command:
