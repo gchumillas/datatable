@@ -14,10 +14,13 @@ import Alert from './components/Alert'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    paddingTop: theme.spacing(2)
+    padding: `${theme.spacing(4)}px 0`
   },
   tableHeader: {
     backgroundColor: theme.palette.grey[300]
+  },
+  buttons: {
+    display: 'flex'
   }
 }))
 
@@ -40,22 +43,27 @@ export default () => {
           loading={loading}
           title="List of items"
           columns={[
-            { name: 'title', label: 'Title' },
+            { name: 'id', label: '#ID', shrink: true, align: 'right' },
+            { name: 'name', label: 'Name' },
+            { name: 'job_title', label: 'Job title' },
+            { name: 'gender', label: 'Gender' },
+            { name: 'email', label: 'Email' },
+            { name: 'phone', label: 'Phone' },
             {
               name: 'actions',
               align: 'right',
               label: (
-                <>
+                <div className={classes.buttons}>
                   <IconButton onClick={retry}>
                     <RefreshIcon />
                   </IconButton>
                   <IconButton onClick={() => setMessage('ADD ITEM: not implemented')}>
                     <AddIcon />
                   </IconButton>
-                </>
+                </div>
               ),
               computed: row => (
-                <>
+                <div className={classes.buttons}>
                   <IconButton onClick={() => setMessage(`EDIT ITEM ${row.id}: not implemented`)}>
                     <EditIcon />
                   </IconButton>
@@ -65,7 +73,7 @@ export default () => {
                   >
                     <DeleteIcon />
                   </IconButton>
-                </>
+                </div>
               )
             }
           ]}
