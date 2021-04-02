@@ -45,17 +45,27 @@ export default () => {
           sort={{ name: 'date', direction: 'desc' }}
           title="List of items"
           columns={[
-            { name: 'id', label: '#ID', sortable: true, shrink: true, align: 'right' },
+            {
+              name: 'id',
+              label: '#ID',
+              sortable: true,
+              shrink: true,
+              align: 'right'
+            },
             {
               name: 'name',
               label: 'Name',
               sortable: true,
+              // by default the component prints the original value, except when
+              // we use a "computed field".
               computed: row => `${row.first_name} ${row.last_name}`
             },
             {
               name: 'date',
               label: 'Birth',
               sortable: true,
+              // in this case the component uses the `sorted` function to sort columns, since
+              // we don't want to sort them by the local representation.
               sorted: row => row.date,
               computed: row => DateTime.fromISO(row.date).toLocaleString(DateTime.DATE_MED)
             },
