@@ -1,4 +1,4 @@
-A React Data Table.
+A Responsive Data Table.
 
 ## Install
 
