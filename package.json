@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "lerna run lint",
     "build": "lerna run build",
-    "demo": "yarn workspace demo start"
+    "demo": "yarn workspace demo start-server & yarn workspace demo start"
   },
   "devDependencies": {
     "@nighttrax/eslint-config-tsx": "~7.0.0",

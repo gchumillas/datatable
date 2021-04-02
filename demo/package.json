@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}'",
     "start-server": "json-server --watch data.js --port 8000",
-    "start": "yarn start-server & cross-env BROWSER=none SKIP_PREFLIGHT_CHECK=true EXTEND_ESLINT=true react-app-rewired start"
+    "start": "cross-env BROWSER=none SKIP_PREFLIGHT_CHECK=true EXTEND_ESLINT=true react-app-rewired start"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
