@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '../lib/http'
 
 export type Item = {
   id: number
@@ -6,7 +6,7 @@ export type Item = {
 }
 
 export const getItems = async (): Promise<Item[]> => {
-  const res = await axios.get('http://localhost:8000/items')
+  const res = await http.get('/items')
 
   return res.data
 }
