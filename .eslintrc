@@ -6,7 +6,6 @@
     "no-console": "off", // we are mostly on the web
     "no-shadow": "off",
     "no-use-before-define": "off",
-    "no-alert": "off",
     // TODO: needs review
     "no-unused-expressions": ["error", { "allowShortCircuit": true }],
     "react/jsx-props-no-spreading": "off",
