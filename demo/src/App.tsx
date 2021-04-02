@@ -34,6 +34,14 @@ export default () => {
     setItems(await getItems())
   })
 
+  // Column visibility:
+  //
+  // xs: displayed on extra small screens and onwards (with >= 400px)
+  // sm: displayed on small screens and onwards (with < 600px)
+  // md: displayed on medium screens and onwards (width >= 960px)
+  // lg: displayed on large screens and onwards (width >= 1280px)
+  // xl: displayed on extra large screens (width >= 1920px)
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -46,6 +54,7 @@ export default () => {
           title="List of items"
           columns={[
             {
+              visibility: 'xl',
               name: 'id',
               label: '#ID',
               sortable: true,
@@ -61,18 +70,20 @@ export default () => {
               computed: row => `${row.first_name} ${row.last_name}`
             },
             {
+              visibility: 'xs',
               name: 'date',
               label: 'Birth',
+              align: 'center',
               sortable: true,
               // in this case the component uses the `sorted` function to sort columns, since
               // we don't want to sort them by the local representation.
               sorted: row => row.date,
               computed: row => DateTime.fromISO(row.date).toLocaleString(DateTime.DATE_MED)
             },
-            { name: 'job_title', label: 'Job title' },
-            { name: 'gender', label: 'Gender' },
-            { name: 'email', label: 'Email' },
-            { name: 'phone', label: 'Phone' },
+            { visibility: 'sm', name: 'gender', label: 'Gender' },
+            { visibility: 'lg', name: 'job_title', label: 'Job title' },
+            { visibility: 'lg', name: 'email', label: 'Email' },
+            { visibility: 'md', name: 'phone', label: 'Phone' },
             {
               name: 'actions',
               align: 'right',
