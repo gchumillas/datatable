@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAsyncRetry } from 'react-use'
+import { DateTime } from 'luxon'
 import { CssBaseline, Container, IconButton } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -41,10 +42,23 @@ export default () => {
           headerProps={{ className: classes.tableHeader }}
           tableProps={{ size: 'small' }}
           loading={loading}
+          sort={{ name: 'date', direction: 'desc' }}
           title="List of items"
           columns={[
-            { name: 'id', label: '#ID', shrink: true, align: 'right' },
-            { name: 'name', label: 'Name', computed: row => `${row.first_name} ${row.last_name}` },
+            { name: 'id', label: '#ID', sortable: true, shrink: true, align: 'right' },
+            {
+              name: 'name',
+              label: 'Name',
+              sortable: true,
+              computed: row => `${row.first_name} ${row.last_name}`
+            },
+            {
+              name: 'date',
+              label: 'Birth',
+              sortable: true,
+              sorted: row => row.date,
+              computed: row => DateTime.fromISO(row.date).toLocaleString(DateTime.DATE_MED)
+            },
             { name: 'job_title', label: 'Job title' },
             { name: 'gender', label: 'Gender' },
             { name: 'email', label: 'Email' },
