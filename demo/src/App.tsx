@@ -10,6 +10,7 @@ import {
 } from '@material-ui/icons'
 import DataTable from '@plastic-ui/datatable'
 import { Item, getItems } from './providers/items'
+import Alert from './components/Alert'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles()
+  const [message, setMessage] = React.useState('')
   const [items, setItems] = React.useState<Item[]>([])
 
   const { loading, retry } = useAsyncRetry(async () => {
@@ -47,18 +49,20 @@ export default () => {
                   <IconButton onClick={retry}>
                     <RefreshIcon />
                   </IconButton>
-                  {/* TODO: replace console.log by a snackbar */}
-                  <IconButton onClick={() => console.log('Insert')}>
+                  <IconButton onClick={() => setMessage('ADD ITEM: not implemented')}>
                     <AddIcon />
                   </IconButton>
                 </>
               ),
               computed: row => (
                 <>
-                  <IconButton onClick={() => console.log(`Edit ${row.id}`)}>
+                  <IconButton onClick={() => setMessage(`EDIT ITEM ${row.id}: not implemented`)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="secondary" onClick={() => console.log(`Delete ${row.id}`)}>
+                  <IconButton
+                    color="secondary"
+                    onClick={() => setMessage(`DELETE ITEM ${row.id}: not implemented`)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </>
@@ -68,6 +72,7 @@ export default () => {
           rows={items}
         />
       </Container>
+      <Alert message={message} onClose={() => setMessage('')} />
     </div>
   )
 }
