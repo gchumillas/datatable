@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAsyncRetry } from 'react-use'
 import { CssBaseline, Container, IconButton } from '@material-ui/core'
-import { Refresh as RefreshIcon } from '@material-ui/icons'
+import { Refresh as RefreshIcon, Add as AddIcon } from '@material-ui/icons'
 import DataTable from '@plastic-ui/datatable'
 import { Item, getItems } from './providers/items'
 
@@ -28,6 +28,9 @@ export default () => {
                 <>
                   <IconButton onClick={retry}>
                     <RefreshIcon />
+                  </IconButton>
+                  <IconButton onClick={() => alert('Unimplemented')}>
+                    <AddIcon />
                   </IconButton>
                 </>
               )
