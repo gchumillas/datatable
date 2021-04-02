@@ -3,13 +3,10 @@ import clsx from 'clsx'
 import _ from 'lodash'
 import { Button, ButtonGroup, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-// TODO: download icons and remove peer dependency
-import {
-  FirstPage as FirstIcon,
-  LastPage as LastIcon,
-  NavigateBefore as PrevIcon,
-  NavigateNext as NextIcon
-} from '@material-ui/icons'
+import FirstIcon from './icons/FirstIcon'
+import PrevIcon from './icons/PrevIcon'
+import NextIcon from './icons/NextIcon'
+import LastIcon from './icons/LastIcon'
 import context from './context'
 
 const useStyles = makeStyles(theme => ({
