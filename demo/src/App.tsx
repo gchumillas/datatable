@@ -44,7 +44,7 @@ export default () => {
           title="List of items"
           columns={[
             { name: 'id', label: '#ID', shrink: true, align: 'right' },
-            { name: 'name', label: 'Name' },
+            { name: 'name', label: 'Name', computed: row => `${row.first_name} ${row.last_name}` },
             { name: 'job_title', label: 'Job title' },
             { name: 'gender', label: 'Gender' },
             { name: 'email', label: 'Email' },
