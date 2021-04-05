@@ -82,7 +82,7 @@ export type DataTableProps = {
   title: string
   columns: Column[]
   rows: Row[]
-  sort?: ColumnSort
+  sort?: ColumnSort[]
   rowsPerPage?: number
   paginator?: {
     maxPages: number
@@ -99,7 +99,7 @@ export default ({
   title,
   columns,
   rows,
-  sort: defaultSort,
+  sort: defaultColumnsSort,
   rowsPerPage = 10,
   paginator = {
     maxPages: 5,
@@ -113,24 +113,25 @@ export default ({
 }: DataTableProps) => {
   const classes = useStyles()
 
-  const [sort, setSort] = React.useState<ColumnSort>()
-  const sortedRows = useSort({ columns, rows, sort })
+  const [columnsSort, setColumnsSort] = React.useState<ColumnSort[]>()
+  const sortedRows = useSort({ columns, rows, columnsSort })
 
   const [page, setPage] = React.useState(0)
   const { pageRows, numPages } = usePaginator({ rows: sortedRows, rowsPerPage, page })
 
   const sortBy = (name: string) => () => {
-    setSort(sort => {
+    setColumnsSort(columnsSort => {
+      const sort = columnsSort[0]
       let direction: SortDirection = 'asc'
       if (sort && name == sort.name) {
         direction = sort.direction == 'desc' ? 'asc' : 'desc'
       }
 
-      return { name, direction }
+      return [{ name, direction }]
     })
   }
 
-  React.useEffect(() => setSort(defaultSort), [defaultSort])
+  React.useEffect(() => setColumnsSort(defaultColumnsSort), [defaultColumnsSort])
 
   return (
     <context.Provider value={{ numPages, ...paginator }}>
@@ -152,7 +153,8 @@ export default ({
           <TableHead>
             <TableRow>
               {columns.map(col => {
-                let sortIcon
+                const sort = columnsSort?.[0]
+                let sortIcon: React.ReactElement
                 if (sort && col.name == sort.name) {
                   sortIcon = sort.direction == 'desc' ? <DescIcon /> : <AscIcon />
                 }

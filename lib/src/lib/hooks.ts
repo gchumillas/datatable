@@ -6,11 +6,11 @@ import { Row, Column, ColumnSort } from '../types'
 export const useSort = ({
   rows,
   columns,
-  sort
+  columnsSort
 }: {
   rows: Row[]
   columns: Column[]
-  sort?: ColumnSort
+  columnsSort?: ColumnSort[]
 }) => {
   const computedRows: { [name: string]: { value: any; label: React.ReactNode } }[] = React.useMemo(
     () =>
@@ -29,20 +29,20 @@ export const useSort = ({
   )
 
   return React.useMemo(() => {
-    const rows = sort
+    const rows = columnsSort
       ? _.orderBy(
           computedRows,
-          row => {
+          columnsSort.map(sort => row => {
             const item = row[sort.name]
             const { value } = item
             return _.isString(value) ? _.toLower(value) : value
-          },
-          sort.direction
+          }),
+          columnsSort.map(sort => sort.direction)
         )
       : computedRows
 
     return _.map(rows, row => _.mapValues(row, row => row.label)) as Row[]
-  }, [computedRows, sort])
+  }, [computedRows, columnsSort])
 }
 
 export const usePaginator = ({
