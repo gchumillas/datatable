@@ -1,5 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
+import _ from 'lodash'
 import {
   Typography,
   Paper,
@@ -82,7 +83,7 @@ export type DataTableProps = {
   title: string
   columns: Column[]
   rows: Row[]
-  sort?: ColumnSort[]
+  sort?: ColumnSort | ColumnSort[]
   rowsPerPage?: number
   paginator?: {
     maxPages: number
@@ -131,7 +132,10 @@ export default ({
     })
   }
 
-  React.useEffect(() => setColumnsSort(defaultColumnsSort), [defaultColumnsSort])
+  React.useEffect(
+    () => setColumnsSort(_.isArray(defaultColumnsSort) ? defaultColumnsSort : [defaultColumnsSort]),
+    [defaultColumnsSort]
+  )
 
   return (
     <context.Provider value={{ numPages, ...paginator }}>
