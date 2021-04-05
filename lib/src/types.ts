@@ -4,7 +4,7 @@ export type SortDirection = 'asc' | 'desc'
 
 export type ColumnSort = {
   name: string
-  direction: SortDirection
+  direction?: SortDirection
 }
 
 export type Column = {

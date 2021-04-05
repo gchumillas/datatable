@@ -50,10 +50,7 @@ export default () => {
           headerProps={{ className: classes.tableHeader }}
           tableProps={{ size: 'small' }}
           loading={loading}
-          sort={[
-            { name: 'date', direction: 'desc' },
-            { name: 'gender', direction: 'asc' }
-          ]}
+          sort={[{ name: 'date', direction: 'desc' }, { name: 'gender' }]}
           title="List of items"
           columns={[
             {
