@@ -20,6 +20,9 @@ export type Column = {
 }
 
 export type Row = {
-  id: React.ReactText
   [name: string]: any
+}
+
+export type InternalRow = {
+  [name: string]: { value: any; computed: React.ReactNode }
 }

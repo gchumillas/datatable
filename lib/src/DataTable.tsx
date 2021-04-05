@@ -122,7 +122,7 @@ export default ({
 
   const sortBy = (name: string) => () => {
     setColumnsSort(columnsSort => {
-      const sort = columnsSort[0]
+      const sort = columnsSort?.[0]
       let direction: SortDirection = 'asc'
       if (sort && name == sort.name) {
         direction = sort.direction == 'desc' ? 'asc' : 'desc'
@@ -132,10 +132,14 @@ export default ({
     })
   }
 
-  React.useEffect(
-    () => setColumnsSort(_.isArray(defaultColumnsSort) ? defaultColumnsSort : [defaultColumnsSort]),
-    [defaultColumnsSort]
-  )
+  React.useEffect(() => {
+    if (!defaultColumnsSort) {
+      return
+    }
+
+    const columnsSort = _.isArray(defaultColumnsSort) ? defaultColumnsSort : []
+    setColumnsSort(columnsSort)
+  }, [defaultColumnsSort])
 
   return (
     <context.Provider value={{ numPages, ...paginator }}>
@@ -158,7 +162,7 @@ export default ({
             <TableRow>
               {columns.map(col => {
                 const sort = columnsSort?.[0]
-                let sortIcon: React.ReactElement
+                let sortIcon: React.ReactNode
                 if (sort && col.name == sort.name) {
                   sortIcon = sort.direction == 'desc' ? <DescIcon /> : <AscIcon />
                 }
@@ -185,25 +189,29 @@ export default ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {pageRows.map(row => (
-              <TableRow key={row.id}>
-                {columns.map(col => {
-                  const props = col.cellProps?.(row) || cellProps?.(row) || {}
-                  const { style, ...rest } = props
+            {pageRows.map(internalRow => {
+              const row: Row = _.mapValues(internalRow, row => row.value)
 
-                  return (
-                    <TableCell
-                      key={col.name}
-                      className={col.visibility ? classes[col.visibility] : undefined}
-                      style={{ textAlign: col.align as any, ...style }}
-                      {...rest}
-                    >
-                      {row[col.name]}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))}
+              return (
+                <TableRow key={row.id}>
+                  {columns.map(col => {
+                    const props = col.cellProps?.(row) || cellProps?.(row) || {}
+                    const { style, ...rest } = props
+
+                    return (
+                      <TableCell
+                        key={col.name}
+                        className={col.visibility ? classes[col.visibility] : undefined}
+                        style={{ textAlign: col.align as any, ...style }}
+                        {...rest}
+                      >
+                        {internalRow[col.name].computed}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
         {numPages > 1 && (

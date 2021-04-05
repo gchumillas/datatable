@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { toString } from './utils'
-import { Row, Column, ColumnSort } from '../types'
+import { Row, InternalRow, Column, ColumnSort } from '../types'
 
 export const useSort = ({
   rows,
@@ -12,16 +12,16 @@ export const useSort = ({
   columns: Column[]
   columnsSort?: ColumnSort[]
 }) => {
-  const computedRows: { [name: string]: { value: any; label: React.ReactNode } }[] = React.useMemo(
+  const computedRows: InternalRow[] = React.useMemo(
     () =>
       rows.map(row => ({
-        id: { value: row.id, label: row.id },
+        id: { value: row.id, computed: row.id },
         ..._.mapValues(
           _.keyBy(columns, col => col.name),
-          ({ name, computed, sorted }) => {
-            const label = computed ? computed(row) : toString(row[name])
-            const value = sorted ? sorted?.(row) : label
-            return { value, label }
+          ({ name, computed: comp, sorted }) => {
+            const computed = comp ? comp(row) : toString(row[name])
+            const value = sorted ? sorted?.(row) : computed
+            return { value, computed }
           }
         )
       })),
@@ -29,7 +29,7 @@ export const useSort = ({
   )
 
   return React.useMemo(() => {
-    const rows = columnsSort
+    return columnsSort
       ? _.orderBy(
           computedRows,
           columnsSort.map(sort => row => {
@@ -37,11 +37,9 @@ export const useSort = ({
             const { value } = item
             return _.isString(value) ? _.toLower(value) : value
           }),
-          columnsSort.map(sort => sort.direction)
+          columnsSort.map(sort => sort.direction || 'asc')
         )
       : computedRows
-
-    return _.map(rows, row => _.mapValues(row, row => row.label)) as Row[]
   }, [computedRows, columnsSort])
 }
 
@@ -50,7 +48,7 @@ export const usePaginator = ({
   rowsPerPage,
   page
 }: {
-  rows: Row[]
+  rows: InternalRow[]
   rowsPerPage: number
   page: number
 }) =>
