@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300]
   },
   buttons: {
-    display: 'flex'
+    display: 'inline-flex'
   }
 }))
 
