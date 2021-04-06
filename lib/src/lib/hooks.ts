@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { toString } from './utils'
 import { Row, InternalRow, Column, ColumnSort } from '../types'
 
-export const useSort = ({
+export const useSortedRows = ({
   rows,
   columns,
   columnsSort
