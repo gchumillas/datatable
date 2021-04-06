@@ -113,15 +113,16 @@ export default ({
   loading
 }: DataTableProps) => {
   const classes = useStyles()
-  const computedRows = useComputedRows({ rows, columns })
 
   const [columnsSort, setColumnsSort] = React.useState<ColumnSort[]>()
+  const computedRows = useComputedRows({ rows, columns })
   const sortedRows = useSortedRows({ rows: computedRows, columnsSort })
 
   const [page, setPage] = React.useState(0)
   const { pageRows, numPages } = usePaginator({ rows: sortedRows, rowsPerPage, page })
 
   const sortBy = (name: string) => () => {
+    setPage(0)
     setColumnsSort(columnsSort => {
       const sort = columnsSort?.[0]
       let direction: SortDirection = 'asc'
