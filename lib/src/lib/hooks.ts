@@ -15,32 +15,36 @@ export const useSort = ({
   const computedRows: InternalRow[] = React.useMemo(
     () =>
       rows.map(row => ({
-        id: { value: row.id, computed: row.id },
+        id: { value: row.id, sorted: row.id, computed: row.id },
         ..._.mapValues(
           _.keyBy(columns, col => col.name),
-          ({ name, computed: comp, sorted }) => {
-            const computed = comp ? comp(row) : toString(row[name])
-            const value = sorted ? sorted?.(row) : computed
-            return { value, computed }
+          ({ name, computed, sorted }) => {
+            const value = row[name]
+            const sortedValue = sorted?.(row)
+            const computedValue = computed?.(row) ?? toString(row[name])
+            return { value, sorted: sortedValue, computed: computedValue }
           }
         )
       })),
     [rows, columns]
   )
 
-  return React.useMemo(() => {
-    return columnsSort
-      ? _.orderBy(
-          computedRows,
-          columnsSort.map(sort => row => {
-            const item = row[sort.name]
-            const { value } = item
-            return _.isString(value) ? _.toLower(value) : value
-          }),
-          columnsSort.map(sort => sort.direction || 'asc')
-        )
-      : computedRows
-  }, [computedRows, columnsSort])
+  return React.useMemo(
+    () =>
+      columnsSort
+        ? _.orderBy(
+            computedRows,
+            columnsSort.map(sort => row => {
+              const item = row[sort.name]
+              // sorting preference
+              const value = item.sorted ?? item.computed ?? item.value
+              return _.isString(value) ? _.toLower(value) : value
+            }),
+            columnsSort.map(sort => sort.direction || 'asc')
+          )
+        : computedRows,
+    [computedRows, columnsSort]
+  )
 }
 
 export const usePaginator = ({

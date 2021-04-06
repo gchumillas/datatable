@@ -24,5 +24,9 @@ export type Row = {
 }
 
 export type InternalRow = {
-  [name: string]: { value: any; computed: React.ReactNode }
+  [name: string]: {
+    value: any
+    sorted: any
+    computed: React.ReactNode
+  }
 }
