@@ -4,7 +4,7 @@ export type SortDirection = 'asc' | 'desc'
 
 export type ColumnSort = {
   name: string
-  direction: SortDirection
+  direction?: SortDirection
 }
 
 export type Column = {
@@ -20,6 +20,13 @@ export type Column = {
 }
 
 export type Row = {
-  id: React.ReactText
   [name: string]: any
+}
+
+export type InternalRow = {
+  [name: string]: {
+    value: any
+    sorted: any
+    computed: React.ReactNode
+  }
 }

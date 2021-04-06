@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300]
   },
   buttons: {
-    display: 'flex'
+    display: 'inline-flex'
   }
 }))
 
@@ -50,7 +50,7 @@ export default () => {
           headerProps={{ className: classes.tableHeader }}
           tableProps={{ size: 'small' }}
           loading={loading}
-          sort={{ name: 'date', direction: 'desc' }}
+          sort={[{ name: 'date', direction: 'desc' }, { name: 'gender' }]}
           title="List of items"
           columns={[
             {

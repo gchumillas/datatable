@@ -1,5 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
+import _ from 'lodash'
 import {
   Typography,
   Paper,
@@ -20,7 +21,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Column, Row, ColumnSort, SortDirection } from './types'
 import context from './context'
-import { useSort, usePaginator } from './lib/hooks'
+import { useComputedRows, useSortedRows, usePaginator } from './lib/hooks'
 import AscIcon from './icons/AscIcon'
 import DescIcon from './icons/DescIcon'
 import Paginator from './Paginator'
@@ -82,7 +83,7 @@ export type DataTableProps = {
   title: string
   columns: Column[]
   rows: Row[]
-  sort?: ColumnSort
+  sort?: ColumnSort | ColumnSort[]
   rowsPerPage?: number
   paginator?: {
     maxPages: number
@@ -99,7 +100,7 @@ export default ({
   title,
   columns,
   rows,
-  sort: defaultSort,
+  sort = [],
   rowsPerPage = 10,
   paginator = {
     maxPages: 5,
@@ -113,24 +114,30 @@ export default ({
 }: DataTableProps) => {
   const classes = useStyles()
 
-  const [sort, setSort] = React.useState<ColumnSort>()
-  const sortedRows = useSort({ columns, rows, sort })
+  const [columnsSort, setColumnsSort] = React.useState<ColumnSort[]>()
+  const computedRows = useComputedRows({ rows, columns })
+  const sortedRows = useSortedRows({ rows: computedRows, columnsSort })
 
   const [page, setPage] = React.useState(0)
   const { pageRows, numPages } = usePaginator({ rows: sortedRows, rowsPerPage, page })
 
   const sortBy = (name: string) => () => {
-    setSort(sort => {
+    setPage(0)
+    setColumnsSort(columnsSort => {
+      const sort = columnsSort?.[0]
       let direction: SortDirection = 'asc'
       if (sort && name == sort.name) {
         direction = sort.direction == 'desc' ? 'asc' : 'desc'
       }
 
-      return { name, direction }
+      return [{ name, direction }]
     })
   }
 
-  React.useEffect(() => setSort(defaultSort), [defaultSort])
+  const defaultSort = _.isArray(sort) ? sort : [sort]
+  React.useEffect(() => {
+    setColumnsSort(defaultSort)
+  }, [JSON.stringify(defaultSort)])
 
   return (
     <context.Provider value={{ numPages, ...paginator }}>
@@ -152,7 +159,8 @@ export default ({
           <TableHead>
             <TableRow>
               {columns.map(col => {
-                let sortIcon
+                const sort = columnsSort?.[0]
+                let sortIcon: React.ReactNode
                 if (sort && col.name == sort.name) {
                   sortIcon = sort.direction == 'desc' ? <DescIcon /> : <AscIcon />
                 }
@@ -179,25 +187,29 @@ export default ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {pageRows.map(row => (
-              <TableRow key={row.id}>
-                {columns.map(col => {
-                  const props = col.cellProps?.(row) || cellProps?.(row) || {}
-                  const { style, ...rest } = props
+            {pageRows.map(internalRow => {
+              const row: Row = _.mapValues(internalRow, row => row.value)
 
-                  return (
-                    <TableCell
-                      key={col.name}
-                      className={col.visibility ? classes[col.visibility] : undefined}
-                      style={{ textAlign: col.align as any, ...style }}
-                      {...rest}
-                    >
-                      {row[col.name]}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))}
+              return (
+                <TableRow key={row.id}>
+                  {columns.map(col => {
+                    const props = col.cellProps?.(row) || cellProps?.(row) || {}
+                    const { style, ...rest } = props
+
+                    return (
+                      <TableCell
+                        key={col.name}
+                        className={col.visibility ? classes[col.visibility] : undefined}
+                        style={{ textAlign: col.align as any, ...style }}
+                        {...rest}
+                      >
+                        {internalRow[col.name].computed}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
         {numPages > 1 && (
