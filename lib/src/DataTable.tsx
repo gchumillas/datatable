@@ -21,7 +21,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Column, Row, ColumnSort, SortDirection } from './types'
 import context from './context'
-import { useSortedRows, usePaginator } from './lib/hooks'
+import { useComputedRows, useSortedRows, usePaginator } from './lib/hooks'
 import AscIcon from './icons/AscIcon'
 import DescIcon from './icons/DescIcon'
 import Paginator from './Paginator'
@@ -115,7 +115,8 @@ export default ({
   const classes = useStyles()
 
   const [columnsSort, setColumnsSort] = React.useState<ColumnSort[]>()
-  const sortedRows = useSortedRows({ columns, rows, columnsSort })
+  const computedRows = useComputedRows({ rows, columns })
+  const sortedRows = useSortedRows({ rows: computedRows, columnsSort })
 
   const [page, setPage] = React.useState(0)
   const { pageRows, numPages } = usePaginator({ rows: sortedRows, rowsPerPage, page })

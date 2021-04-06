@@ -3,16 +3,8 @@ import _ from 'lodash'
 import { toString } from './utils'
 import { Row, InternalRow, Column, ColumnSort } from '../types'
 
-export const useSortedRows = ({
-  rows,
-  columns,
-  columnsSort
-}: {
-  rows: Row[]
-  columns: Column[]
-  columnsSort?: ColumnSort[]
-}) => {
-  const computedRows: InternalRow[] = React.useMemo(
+export const useComputedRows = ({ rows, columns }: { rows: Row[]; columns: Column[] }) =>
+  React.useMemo(
     () =>
       rows.map(row => ({
         id: { value: row.id, sorted: row.id, computed: row.id },
@@ -29,11 +21,18 @@ export const useSortedRows = ({
     [rows, columns]
   )
 
-  return React.useMemo(
+export const useSortedRows = ({
+  rows,
+  columnsSort
+}: {
+  rows: InternalRow[]
+  columnsSort?: ColumnSort[]
+}) =>
+  React.useMemo(
     () =>
       columnsSort
         ? _.orderBy(
-            computedRows,
+            rows,
             columnsSort.map(sort => row => {
               const item = row[sort.name]
               // sorting preference
@@ -42,10 +41,9 @@ export const useSortedRows = ({
             }),
             columnsSort.map(sort => sort.direction || 'asc')
           )
-        : computedRows,
-    [computedRows, columnsSort]
+        : rows,
+    [rows, columnsSort]
   )
-}
 
 export const usePaginator = ({
   rows,
