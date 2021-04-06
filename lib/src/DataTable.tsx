@@ -100,7 +100,7 @@ export default ({
   title,
   columns,
   rows,
-  sort: defaultColumnsSort,
+  sort = [],
   rowsPerPage = 10,
   paginator = {
     maxPages: 5,
@@ -113,9 +113,9 @@ export default ({
   loading
 }: DataTableProps) => {
   const classes = useStyles()
+  const computedRows = useComputedRows({ rows, columns })
 
   const [columnsSort, setColumnsSort] = React.useState<ColumnSort[]>()
-  const computedRows = useComputedRows({ rows, columns })
   const sortedRows = useSortedRows({ rows: computedRows, columnsSort })
 
   const [page, setPage] = React.useState(0)
@@ -133,14 +133,10 @@ export default ({
     })
   }
 
+  const defaultSort = _.isArray(sort) ? sort : [sort]
   React.useEffect(() => {
-    if (!defaultColumnsSort) {
-      return
-    }
-
-    const columnsSort = _.isArray(defaultColumnsSort) ? defaultColumnsSort : []
-    setColumnsSort(columnsSort)
-  }, [defaultColumnsSort])
+    setColumnsSort(defaultSort)
+  }, [JSON.stringify(defaultSort)])
 
   return (
     <context.Provider value={{ numPages, ...paginator }}>
