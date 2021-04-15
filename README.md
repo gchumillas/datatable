@@ -1,5 +1,7 @@
 A Responsive Data Table.
 
+You can programmatically determine the number of columns, based on the screen size.
+
 ![datatable](https://user-images.githubusercontent.com/5312427/113453175-c07b8580-9405-11eb-8177-4c44600eb075.gif)
 
 ## Install
