@@ -18,7 +18,7 @@ yarn add @plastic-ui/datatable
 
 ## Example
 
-You'll find a complete example [here](https://github.com/gchumillas/datatable/blob/main/demo/src/App.tsx).
+You'll find a complete example [HERE](https://github.com/gchumillas/datatable/blob/main/demo/src/App.tsx).
 
 ## Demo
 
